@@ -11,6 +11,39 @@
     transform : scale(1.1);
 }
 
+.carousel-caption {
+    animation: fadeInUp 1s ease-in-out;
+  }
+  
+  @keyframes fadeInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .carousel-item img {
+    height: 500px;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  .carousel-caption h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+  }
+  .carousel-caption p {
+    font-size: 1.2rem;
+    padding: 0 20px;
+  }  
+  
+
 /* .owl-carousel img{
     transition: transform .5s ease;
   }

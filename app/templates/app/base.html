@@ -96,18 +96,34 @@
           <button class="btn btn-outline-success" type="submit">Search</button>
         </form>
       </div>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle text-white" href="#" id="servicesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          User1
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="servicesDropdown">
+          <li><a class="dropdown-item" href="/services/consulting">Proffile</a></li>
+          <li><a class="dropdown-item" href="/services/support">Your orders</a></li>
+          <li><a class="dropdown-item" href="/services/support">Log out</a></li>
+        </ul>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-white" href="/about">Cart</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-white" href="/about">Login</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-white" href="/about">Register</a>
+      </li>
     </div>
   </nav>
   
 
-  <main>
-    <section>
-      <h2>Main Content</h2>
-      <p>This is the home page of the website.</p>
-    </section>
-  </main>
+<!-- main body -->
+ {% block banner_slider %}{% endblock banner_slider %}
+ {% block main_content %}{% endblock main_content %}
 
-  <footer>
+  <footer class="container-fluid bg-black text-center text-white fixed-bottom p-2 mt-5">
     <p>&copy; 2025 My Website. All rights reserved.</p>
   </footer>
 
