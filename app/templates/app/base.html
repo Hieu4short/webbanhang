@@ -1,9 +1,10 @@
 {% load static %}
+{% now "U" as timestamp %}
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Elektronics</title>
+  <title>NutriHealth</title>
   <meta name="description" content="Welcome to our website">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -12,6 +13,7 @@
   <link href="{% static 'app/css/style.css' %}" rel="stylesheet" />
   <link href="{% static 'app/css/owl.carousel.min' %}" rel="stylesheet" />
   <link href="{% static 'app/css/all.min' %}" rel="stylesheet" />
+  <link href="{% static 'app/css/main.css' %}?v={{ timestamp }}" rel="stylesheet" />
 
   <!-- JS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -40,92 +42,86 @@
 
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">
-        <img src= "{% static 'app/images/logo.png' %}" width="180" height="100" />
-      </a>
-  
-      <!-- Toggle button for mobile -->
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-  
-      <!-- Navbar items -->
-      <div class="collapse navbar-collapse" id="mainNavbar">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-  
-          <!-- Home -->
-          <li class="nav-item">
-            <a class="nav-link active" href="/">Home</a>
-          </li>
-  
-          <!-- Product Dropdown -->
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="productDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Products
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="productDropdown">
-              <li><a class="dropdown-item" href="/products/electronics">Smartphones</a></li>
-              <li><a class="dropdown-item" href="/products/clothing">Tablets</a></li>
-              <li><a class="dropdown-item" href="/products/clothing">Laptops</a></li>
-              <li><a class="dropdown-item" href="/products/accessories">Earphones</a></li>
-            </ul>
-          </li>
-  
-          <!-- Services Dropdown -->
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="servicesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Services
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="servicesDropdown">
-              <li><a class="dropdown-item" href="/services/consulting">Consulting</a></li>
-              <li><a class="dropdown-item" href="/services/support">Support</a></li>
-              <li><a class="dropdown-item" href="/services/support">Contact</a></li>
-            </ul>
-          </li>
-  
-          <!-- About -->
-          <li class="nav-item">
-            <a class="nav-link" href="/about">About us</a>
-          </li>
-        </ul>
-  
-        <!-- Search form -->
-        <form class="d-flex" action="/search" method="get">
-          <input class="form-control me-2" type="search" name="q" placeholder="Search..." aria-label="Search">
-          <button class="btn btn-outline-success" type="submit">Search</button>
-        </form>
-      </div>
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+      <img src="{% static 'app/images/logo1.png' %}" width="140" height="140" />
+    </a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="mainNavbar">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+        <!-- Home -->
+        <li class="nav-item">
+          <a class="nav-link active" href="/">Home</a>
+        </li>
+
+        <!-- Articles -->
+        <li class="nav-item">
+          <a class="nav-link" href="/articles">Articles</a>
+        </li>
+
+        <!-- Tools Dropdown -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="toolsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Nutrition Tools
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="toolsDropdown">
+            <li><a class="dropdown-item" href="/tools/bmi">BMI Calculator</a></li>
+            <li><a class="dropdown-item" href="/tools/bmr">BMR Calculator</a></li>
+            <li><a class="dropdown-item" href="/tools/nutrients">Food Lookup</a></li>
+          </ul>
+        </li>
+
+        <!-- Recipes -->
+        <li class="nav-item">
+          <a class="nav-link" href="/recipes">Recipes</a>
+        </li>
+
+        <!-- About -->
+        <li class="nav-item">
+          <a class="nav-link" href="/about">About Us</a>
+        </li>
+      </ul>
+
+      <!-- Search -->
+      <form class="d-flex" action="/search" method="get">
+        <input class="form-control me-2" type="search" name="q" placeholder="Search..." aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+
+      <!-- User Options -->
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle text-white" href="#" id="servicesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <a class="nav-link dropdown-toggle text-white" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
           User1
         </a>
-        <ul class="dropdown-menu" aria-labelledby="servicesDropdown">
-          <li><a class="dropdown-item" href="/services/consulting">Proffile</a></li>
-          <li><a class="dropdown-item" href="/services/support">Your orders</a></li>
-          <li><a class="dropdown-item" href="/services/support">Log out</a></li>
+        <ul class="dropdown-menu" aria-labelledby="userDropdown">
+          <li><a class="dropdown-item" href="/profile">Profile</a></li>
+          <li><a class="dropdown-item" href="/saved">Saved Articles</a></li>
+          <li><a class="dropdown-item" href="/logout">Log out</a></li>
         </ul>
       </li>
       <li class="nav-item">
-        <a class="nav-link text-white" href="/about">Cart</a>
+        <a class="nav-link text-white" href="/login">Login</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link text-white" href="/about">Login</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link text-white" href="/about">Register</a>
+        <a class="nav-link text-white" href="/register">Register</a>
       </li>
     </div>
-  </nav>
+  </div>
+</nav>
   
 
 <!-- main body -->
  {% block banner_slider %}{% endblock banner_slider %}
  {% block main_content %}{% endblock main_content %}
 
-  <footer class="container-fluid bg-black text-center text-white fixed-bottom p-2 mt-5">
-    <p>&copy; 2025 My Website. All rights reserved.</p>
-  </footer>
+<!-- Footer -->
+ {% include 'app/_footer.html' %}
+
 
   <!-- JavaScript at the bottom for faster page load -->
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
