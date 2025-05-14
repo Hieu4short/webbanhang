@@ -1,0 +1,59 @@
+{% extends 'app/base.html' %}
+{% block main_content %}
+<div class="container my-5">
+  <h2 class="text-center mb-4">BMR Calculator</h2>
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow p-4">
+        <form id="bmrForm">
+          <div class="mb-3">
+            <label for="gender" class="form-label">Gender</label>
+            <select class="form-control" id="gender" required>
+              <option value="">-- Select Gender --</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="weight" class="form-label">Weight (kg)</label>
+            <input type="number" class="form-control" id="weight" required>
+          </div>
+          <div class="mb-3">
+            <label for="height" class="form-label">Height (cm)</label>
+            <input type="number" class="form-control" id="height" required>
+          </div>
+          <div class="mb-3">
+            <label for="age" class="form-label">Age</label>
+            <input type="number" class="form-control" id="age" required>
+          </div>
+          <button type="submit" class="btn btn-success w-100">Calculate</button>
+        </form>
+        <div class="mt-4" id="result" style="display: none;">
+          <h5 class="text-center">Your BMR is: <span id="bmrValue"></span> calories/day</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.getElementById('bmrForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+
+  const gender = document.getElementById('gender').value;
+  const weight = parseFloat(document.getElementById('weight').value);
+  const height = parseFloat(document.getElementById('height').value);
+  const age = parseFloat(document.getElementById('age').value);
+
+  let bmr = 0;
+  if (gender === 'male') {
+    bmr = 10 * weight + 6.25 * height - 5 * age + 5;
+  } else if (gender === 'female') {
+    bmr = 10 * weight + 6.25 * height - 5 * age - 161;
+  }
+
+  document.getElementById('bmrValue').innerText = bmr.toFixed(2);
+  document.getElementById('result').style.display = 'block';
+});
+</script>
+{% endblock main_content %}

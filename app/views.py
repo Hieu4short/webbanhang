@@ -7,3 +7,6 @@ def home(request):
 
 def bmi_calculator(request):
     return render(request, 'app/bmi.html')
+
+def bmr_calculator(request):
+    return render(request, 'app/bmr.html')
