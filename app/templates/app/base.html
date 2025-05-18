@@ -94,22 +94,28 @@
       </form>
 
       <!-- User Options -->
+      {% if user.is_authenticated %}
+      <!-- Dropdown nếu đã đăng nhập -->
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle text-white" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-          User1
+          {{ user.username }}
         </a>
-        <ul class="dropdown-menu" aria-labelledby="userDropdown">
-          <li><a class="dropdown-item" href="/profile">Profile</a></li>
-          <li><a class="dropdown-item" href="/saved">Saved Articles</a></li>
-          <li><a class="dropdown-item" href="/logout">Log out</a></li>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+          <li><a class="dropdown-item" href="#">Profile</a></li>
+          <li><a class="dropdown-item" href="#">Saved Articles</a></li>
+          <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
         </ul>
       </li>
+    {% else %}
+      <!-- Nếu chưa đăng nhập -->
       <li class="nav-item">
-        <a class="nav-link text-white" href="/login">Login</a>
+        <a class="nav-link text-white" href="{% url 'login' %}">Login</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link text-white" href="/register">Register</a>
+        <a class="nav-link text-white" href="{% url 'register' %}">Register</a>
       </li>
+    {% endif %}
+
     </div>
   </div>
 </nav>
