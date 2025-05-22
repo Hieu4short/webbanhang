@@ -5,42 +5,28 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card shadow p-4">
-                <form id="BMIForm">
+                <form method="post">
+                    {% csrf_token %}
                     <div class="mb-3">
-                        <label for="weight" class="form-label">Weight(Kg)</label>
-                        <input type="number" class="form-control" id="weight" required>
+                        <label for="weight" class="form-label">Weight (kg)</label>
+                        <input type="number" class="form-control" name="weight" required>
                     </div>
                     <div class="mb-3">
                         <label for="height" class="form-label">Height (cm)</label>
-                        <input type="number" class="form-control" id="height" required>
-                      </div>
-                      <button type="submit" class="btn btn-success w-100">Calculate</button>
+                        <input type="number" class="form-control" name="height" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Calculate</button>
                 </form>
-                <div class="mt-4" id="result" style="display: none;">
-                    <h5 class="text-center">Your BMI: <span id="BMIValue"></span></h5>
-                    <p class="text-center" id="bmiCategory"></p>
-                </div>
+
+               {% if bmi %}
+               <div class="mt-4 id="result">
+                <h5 class="text-center">Your BMI: <span>{{ bmi }}</span></h5>
+                <p class="text-center">Category: {{ category }}</p>
+            </div>
+            {% endif %}
             </div>
         </div>
     </div>
 </div>
 
-<script>
-    document.getElementById('BMIForm').addEventListener('submit', function(e) { e.preventDefault();
-        const weight = parseFloat(document.getElementById('weight').value);
-        const height = parseFloat(document.getElementById('height').value) / 100;
-
-        const bmi = (weight / (height * height)).toFixed(2);
-        document.getElementById('BMIValue').innerText = bmi;
-
-        let category = '';
-        if (bmi < 18.5) category = "Underweight";
-        else if (bmi < 25) category = "Normal weight";
-        else if (bmi < 30) category = "Overweight";
-        else category = "Obese";
-
-        document.getElementById('bmiCategory').innerText = category;
-        document.getElementById('result').style.display = 'block';
-    });
-</script>
 {% endblock main_content %}

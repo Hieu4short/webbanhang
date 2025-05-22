@@ -1,0 +1,32 @@
+{% extends 'app/base.html' %}
+
+{% block main_content %}
+<div class="container my-5">
+    <h2 class="text-center mb-4">Your Profile</h2>
+    <p><strong>Username:</strong> {{ user.username }}</p>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+
+    <hr>
+    <h4>BMI History</h4>
+    <ul>
+        {% for log in bmi_logs %}
+        <li>
+            {{log.created_at|date:"Y-m-d H:i"}} - BMI: {{log.bmi_value}} ({{log.bmi_category}})
+        </li>
+        {% empty %}
+        <li>No BMI records yet.</li>
+        {% endfor %}
+    </ul>
+
+    <h4>BMR History</h4>
+    <ul>
+        {% for log in bmr_logs %}
+        <li>
+            {{log.created_at|date:"Y-m-d H:i"}} - BMR: {{log.bmr_value}} 
+        </li>
+        {% empty %}
+        <li>No BMR records yet.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock main_content %}

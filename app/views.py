@@ -6,6 +6,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User                 
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required                        
+from .models import BMILog, BMRLog
 
 
 # Create your views here.
@@ -24,17 +25,76 @@ def register(request):
 
 @login_required
 def profile(request):
-    return render(request, 'app/home.html')
+    bmi_logs = BMILog.objects.filter(user=request.user).order_by('created_at')[:5]
+    bmr_logs = BMRLog.objects.filter(user=request.user).order_by('created_at')[:5]
+    return render(request, 'app/profile.html', {
+        'bmi_logs': bmi_logs,
+        'bmr_logs': bmr_logs
+    })
 
 
 def home(request):
     return render(request, 'app/home.html')
 
 def bmi_calculator(request):
-    return render(request, 'app/bmi.html')
+    bmi = None
+    category = None
+
+    if request.method == 'POST':
+        weight = float(request.POST['weight'])
+        height_cm = float(request.POST['height'])
+        height_m = height_cm / 100
+        bmi = round(weight / (height_m ** 2), 2)
+
+        if bmi <= 18.5:
+            category = "Underweight"
+        elif bmi < 25:
+            category = "Normal"
+        elif bmi < 30:
+            category = "Overweight"
+        else:
+            category = "Obese"
+
+        BMILog.objects.create(
+            user=request.user,
+            weight=weight,
+            height=height_cm,
+            bmi_value=bmi,
+            category=category
+        )
+
+    return render(request, 'app/bmi.html', {
+        'bmi': bmi,
+        'category': category
+    })
 
 def bmr_calculator(request):
-    return render(request, 'app/bmr.html')
+    bmr = None
+
+    if request.method == 'POST':
+        weight = float(request.POST.get('weight'))
+        height = float(request.POST.get('height'))
+        age = int(request.POST.get('age'))
+        gender = request.POST.get('gender')
+
+        if gender == 'male':
+            bmr = round(10 * weight + 6.25 * height - 5 * age + 5, 2)
+        elif gender == 'female':
+            bmr = round(10 * weight + 6.25 * height - 5 * age - 161, 2)
+
+        # Save the BMR log to the database
+        BMRLog.objects.create(
+            user=request.user,
+            gender=gender,
+            weight=weight,
+            height=height,
+            age=age,
+            bmr_value=bmr
+        )
+
+    return render(request, 'app/bmr.html', {
+        'bmr': bmr
+    })
 
 def food_lookup(request):
     query = request.GET.get('q')

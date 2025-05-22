@@ -14,4 +14,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('tools/bmr/', views.bmr_calculator, name='bmr'),
     path('tools/food-lookup/', views.food_lookup, name='food_lookup'),
+    path('profile/', views.profile, name='profile'),
 ]
