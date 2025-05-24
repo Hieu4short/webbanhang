@@ -19,3 +19,9 @@ class BMRLog(models.Model):
     bmr_value = models.FloatField()
     created_at = models.DateTimeField(auto_now_add=True)
 
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    avatar = models.ImageField(upload_to='avatars/', default='default.png')
+
+    def __str__(self):
+        return self.user.username

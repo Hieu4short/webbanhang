@@ -7,6 +7,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required                        
 from .models import BMILog, BMRLog
+from .forms import AvatarUpdateForm
+from .models import UserProfile
 
 
 # Create your views here.
@@ -146,3 +148,16 @@ def food_lookup(request):
 
     return render(request, 'app/food_lookup.html', {'results': results})
 
+@login_required
+def update_avatar(request):
+    profile, created = UserProfile.objects.get_or_create(user=request.user)
+    if request.method == 'POST':
+        form = AvatarUpdateForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+    else:
+        form = AvatarUpdateForm(instance=profile)
+
+    return render(request, 'app/update_avatar.html', {'form': form})
+        

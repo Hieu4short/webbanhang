@@ -3,6 +3,14 @@
 {% block main_content %}
 <div class="container my-5">
     <h2 class="text-center mb-4">Your Profile</h2>
+    <div class="text-center">
+        <img src="{{ user.userprofile.avatar.url }}" alt="Avatar" width="120" height="120" class="rounded-circle">
+        <br>
+            <div class="d-flex justify-content-center gap-2 mt-2 mb-4">
+                <a href="{% url 'update_avatar' %}" class="btn btn-outline-primary">Update Avatar</a>
+                <a href="{% url 'change_password' %}" class="btn btn-outline-secondary">Change Password</a>
+            </div>
+    </div>
     <p><strong>Username:</strong> {{ user.username }}</p>
     <p><strong>Email:</strong> {{ user.email }}</p>
 

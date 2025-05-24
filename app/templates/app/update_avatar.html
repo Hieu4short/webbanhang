@@ -1,0 +1,25 @@
+{% extends 'app/base.html' %}
+{% load widget_tweaks %}
+{% block main_content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Update Avatar</h2>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="mb-3 text-center">
+                    <img src="{{ request.user.userprofile.avatar.url }}" alt="Avatar" width="120" height="120" class="rounded-circle mb-2">
+                </div>
+                <div class="mb-3">
+                    {{form.avatar.label_tag}}
+                    {{form.avatar|add_class:"form-control"}}
+                    {% for error in form.avatar.errors %}
+                        <div class="text-danger">{{error}}</div>
+                        {% endfor %}
+                </div>
+                <button type="submit" class="btn btn-success mt-3 mx-auto d-block" style="width: 200px">Update Avatar</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock main_content %}

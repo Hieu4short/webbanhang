@@ -15,4 +15,9 @@ urlpatterns = [
     path('tools/bmr/', views.bmr_calculator, name='bmr'),
     path('tools/food-lookup/', views.food_lookup, name='food_lookup'),
     path('profile/', views.profile, name='profile'),
+    path('change_password/', auth_views.PasswordChangeView.as_view(
+        template_name='app/change_password.html',
+        success_url ='/profile'), name='change_password' 
+    ),
+    path('update_avatar/', views.update_avatar, name='update_avatar'),
 ]
