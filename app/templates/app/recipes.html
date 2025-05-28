@@ -6,18 +6,18 @@
         {% for meal in page_obj %}
         <div class="col-md-4 col-lg-3">
             <div class="card h-100">
-                <a href="{% url 'recipe_detail' meal.idMeal %}">
-                    <img src="{{ meal.strMealThumb }}" class="card-img-top" alt="{{ meal.strMeal }}">
+                <a href="{% url 'recipe_detail' meal.id %}">
+                    <img src="{{ meal.image }}" class="card-img-top" alt="{{ meal.title }}">
                 </a>
                 <div class="card-body">
                     <h5 class="card-title">
-                        <a href="{% url 'recipe_detail' meal.idMeal %}">{{ meal.strMeal }}</a>
+                        <a href="{% url 'recipe_detail' meal.id %}">{{ meal.title }}</a>
                     </h5>
                     <button class="btn btn-outline-danger btn-fav"
-                        data-meal-id="{{ meal.idMeal }}"
-                        data-meal-name="{{ meal.strMeal }}"
-                        data-meal-thumb="{{ meal.strMealThumb }}">
-                        {% if meal.idMeal in favorite_ids %}
+                        data-meal-id="{{ meal.id }}"
+                        data-meal-name="{{ meal.title }}"
+                        data-meal-thumb="{{ meal.image }}">
+                        {% if meal.id in favorite_ids %}
                             ♥ Favorite
                         {% else %}
                             ♡ Favorite

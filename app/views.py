@@ -13,8 +13,9 @@ from .models import UserProfile
 from django.core.paginator import Paginator
 from .models import FavoriteRecipe
 from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_exempt
 
-
+API_KEY = "805eb0b0233841bc86e44f6dac02401d"
 # Create your views here.
 
 def register(request):
@@ -165,37 +166,45 @@ def update_avatar(request):
 
     return render(request, 'app/update_avatar.html', {'form': form})
         
-
 def recipes(request):
-    category = request.GET.get('category')
-    page_number = request.GET.get('page', 1)
-
-    if category:
-        url =  f'https://www.themealdb.com/api/json/v1/1/filter.php?c={category}'
-    else:
-        url ='https://www.themealdb.com/api/json/v1/1/search.php?s='
+    query = request.GET.get("query", "chicken")
+    url = f"https://api.spoonacular.com/recipes/complexSearch?query={query}&number=20&apiKey={API_KEY}"
     response = requests.get(url)
-    meals = response.json().get('meals', [])
+    data = response.json()
 
-    paginator = Paginator(meals, 8)
+    recipes = data.get("results", [])
+    paginator = Paginator(recipes, 8)
+    page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
-    favorite_ids = []
-    if request.user.is_authenticated:
-        favorite_ids = FavoriteRecipe.objects.filter(user=request.user).values_list('meal_id', flat=True) 
-
-    cat_response = requests.get('https://www.themealdb.com/api/json/v1/1/list.php?c=list')
-    categories = cat_response.json().get('meals', [])
+    favorite_ids = FavoriteRecipe.objects.filter(user=request.user).values_list("meal_id", flat=True) if request.user.is_authenticated else []
 
     return render(request, 'app/recipes.html', {
         'page_obj': page_obj,
-        'category': category,
         'favorite_ids': favorite_ids,
-        'categories': categories,
+        'query': query,
     })
 
+def recipe_detail(request, meal_id):
+    url = f"https://api.spoonacular.com/recipes/{meal_id}/information?apiKey={API_KEY}"
+    response = requests.get(url)
+    data = response.json()
+
+    ingredients = []
+    for item in data.get("extendedIngredients", []):
+        ingredients.append({
+            "ingredient": item.get("originalName", ""),
+            "measure": item.get("amount", ""),
+        })
+
+    return render(request, 'app/recipe_detail.html', {
+        "meal": data,
+        "ingredients": ingredients
+    })
+
+
+@csrf_exempt
 @login_required
-@require_POST
 def toggle_favorite(request):
     if request.method == 'POST':
         meal_id = request.POST.get('meal_id')
@@ -213,31 +222,8 @@ def toggle_favorite(request):
             return JsonResponse({'status': 'removed'})
         return JsonResponse({'status': 'added'})
 
-    return JsonResponse({'error': 'Invalid request'}, status=400)
 
 
-def recipe_detail(request, meal_id):
-    url = f'https://www.themealdb.com/api/json/v1/1/lookup.php?i={meal_id}'
-    response = requests.get(url)
-    data = response.json()
-    meal = data['meals'][0] if data['meals'] else None
-    ingredients = []
-    is_favorite = False
-
-    if meal:
-        for i in range(1, 21):
-            ingredient = meal.get(f'strIngredient{i}')
-            measure = meal.get(f'strMeasure{i}')
-            if ingredient and ingredient.strip():
-                ingredients.append({'ingredient': ingredient.strip(), 'measure': measure.strip() if measure else ''})
-        if request.user.is_authenticated:
-            is_favorite = FavoriteRecipe.objects.filter(user=request.user, meal_id=meal_id).exists()
-
-    return render(request, 'app/recipe_detail.html', {
-        'meal': meal,
-        'ingredients': ingredients,
-        'is_favorite': is_favorite,
-    })
 
 @login_required
 def favorite_recipes(request):

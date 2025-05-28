@@ -1,62 +1,26 @@
 {% extends 'app/base.html' %}
 {% block main_content %}
-<div class="container my-5">
-  {% if meal %}
-    <div class="row justify-content-center">
-      <div class="col-md-8 col-lg-6">
-        <h2 class="text-center">{{ meal.strMeal }}</h2>
-
-        <div class="text-center">
-          <img src="{{ meal.strMealThumb }}" class="img-fluid mb-3" style="max-width:50%; height:auto;">
-        </div>
-
-        <form id="favoriteForm" method="POST" action="{% url 'toggle_favorite' %}" class="text-center mb-4">
-          {% csrf_token %}
-          <input type="hidden" name="meal_name" value="{{ meal.strMeal }}">
-          <input type="hidden" name="meal_id" value="{{ meal.idMeal }}">
-          <input type="hidden" name="meal_thumb" value="{{ meal.strMealThumb }}">
-          <button type="submit" class="btn btn-outline-danger" id="favBtn">
-            <span id="favIcon">{% if is_favorite %}♥{% else %}♡{% endif %}</span> Favorite
-          </button>
+<div class="container my-5 text-center">
+    {% if meal %}
+        <h2>{{ meal.title }}</h2>
+        <img src="{{ meal.image }}" class="img-fluid mb-3" style="max-width:300px;">
+        <form id="favoriteForm" method="POST" action="{% url 'toggle_favorite' %}">
+            {% csrf_token %}
+            <input type="hidden" name="meal-name" value="{{ meal.title }}">
+            <input type="hidden" name="meal-id" value="{{ meal.id }}">
+            <input type="hidden" name="meal-thumb" value="{{ meal.image }}">
+            <button type="submit" class="btn btn-outline-danger" id="favBtn">❤ Favorite</button>
         </form>
-
-        <h4>Ingredients:</h4>
-        <ul class="list-group mb-4">
-          {% for item in ingredients %}
-            <li class="list-group-item d-flex justify-content-between">
-              <span>{{ item.ingredient }}</span>
-              <span>{{ item.measure }}</span>
-            </li>
-          {% endfor %}
+        <h4 class="mt-4">Ingredients:</h4>
+        <ul class="list-unstyled">
+            {% for item in ingredients %}
+            <li>{{ item.ingredient }} - {{ item.measure }}</li>
+            {% endfor %}
         </ul>
-
-        <h4>Instructions:</h4>
-        <p>{{ meal.strInstructions }}</p>
-      </div>
-    </div>
-  {% else %}
-    <p class="text-center">Meal not found.</p>
-  {% endif %}
+        <h4 class="mt-4">Instructions:</h4>
+        <p>{{ meal.instructions|safe }}</p>
+    {% else %}
+        <p>Meal not found.</p>
+    {% endif %}
 </div>
-
-<script>
-  document.getElementById('favoriteForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    const formData = new FormData(this);
-    const response = await fetch("{% url 'toggle_favorite' %}", {
-      method: 'POST',
-      body: formData,
-      headers: {
-        'X-CSRFToken': formData.get('csrfmiddlewaretoken'),
-      }
-    });
-    const result = await response.json();
-    const favIcon = document.getElementById('favIcon');
-    if (result.status === 'added') {
-      favIcon.textContent = '♥';
-    } else if (result.status === 'removed') {
-      favIcon.textContent = '♡';
-    }
-  });
-</script>
 {% endblock %}
