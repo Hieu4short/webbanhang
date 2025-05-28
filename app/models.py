@@ -25,3 +25,10 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.user.username
+
+class FavoriteRecipe(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    meal_id = models.CharField(max_length=20)
+    meal_name = models.CharField(max_length=255)
+    meal_thumb = models.URLField()
+    created_at = models.DateTimeField(auto_now_add=True)

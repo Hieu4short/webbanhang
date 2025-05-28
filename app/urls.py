@@ -20,4 +20,8 @@ urlpatterns = [
         success_url ='/profile'), name='change_password' 
     ),
     path('update_avatar/', views.update_avatar, name='update_avatar'),
+    path('recipes/', views.recipes, name='recipes'),
+    path('favorites/', views.favorite_recipes, name='favorite_recipes'),
+    path('toggle_favorite/', views.toggle_favorite, name='toggle_favorite'),
+    path('recipes/<str:meal_id>/', views.recipe_detail, name='recipe_detail'),
 ]

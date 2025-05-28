@@ -1,0 +1,62 @@
+{% extends 'app/base.html' %}
+{% block main_content %}
+<div class="container my-5">
+    <h2 class="text-center mb-4">Recipes</h2>
+    <div class="row justify-content-center">
+        {% for meal in page_obj %}
+        <div class="col-md-4 col-lg-3">
+            <div class="card h-100">
+                <a href="{% url 'recipe_detail' meal.idMeal %}">
+                    <img src="{{ meal.strMealThumb }}" class="card-img-top" alt="{{ meal.strMeal }}">
+                </a>
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <a href="{% url 'recipe_detail' meal.idMeal %}">{{ meal.strMeal }}</a>
+                    </h5>
+                    <button class="btn btn-outline-danger btn-fav"
+                        data-meal-id="{{ meal.idMeal }}"
+                        data-meal-name="{{ meal.strMeal }}"
+                        data-meal-thumb="{{ meal.strMealThumb }}">
+                        {% if meal.idMeal in favorite_ids %}
+                            ♥ Favorite
+                        {% else %}
+                            ♡ Favorite
+                        {% endif %}
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <!-- Pagination -->
+    <nav>
+      <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+          <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if category %}&category={{ category }}{% endif %}">Previous</a></li>
+        {% endif %}
+        <li class="page-item active"><span class="page-link">{{ page_obj.number }}</span></li>
+        {% if page_obj.has_next %}
+          <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}{% if category %}&category={{ category }}{% endif %}">Next</a></li>
+        {% endif %}
+      </ul>
+    </nav>
+</div>
+<script>
+$('.btn-fav').click(function(e){
+    e.preventDefault();
+    var btn = $(this);
+    $.post("{% url 'toggle_favorite' %}", {
+        'meal_id': btn.data('meal-id'),
+        'meal_name': btn.data('meal-name'),
+        'meal_thumb': btn.data('meal-thumb'),
+        'csrfmiddlewaretoken': '{{ csrf_token }}'
+    }, function(data){
+        if(data.status == 'added'){
+            btn.html('♥ Favorite');
+        } else {
+            btn.html('♡ Favorite');
+        }
+    });
+});
+</script>
+{% endblock %}
