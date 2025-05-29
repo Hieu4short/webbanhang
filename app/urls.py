@@ -20,7 +20,7 @@ urlpatterns = [
         success_url ='/profile'), name='change_password' 
     ),
     path('recipes/', views.recipes, name='recipes'),
-    path('recipes/<int:meal_id>/', views.recipe_detail, name='recipe_detail'),
     path('favorites/', views.favorite_recipes, name='favorite_recipes'),
-    path('toggle-favorite/', views.toggle_favorite, name='toggle_favorite'),
+    path('toggle_favorite/', views.toggle_favorite, name='toggle_favorite'),
+    path('recipes/<str:meal_id>/', views.recipe_detail, name='recipe_detail'),
 ]
