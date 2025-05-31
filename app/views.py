@@ -171,34 +171,59 @@ def update_avatar(request):
 
 def recipes(request):
     category = request.GET.get('category')
+    area = request.GET.get('area')
+    tag = request.GET.get('tag')
+    search = request.GET.get('search')
     page_number = request.GET.get('page', 1)
-    
-    try:
-        with open('cached_meals.json', 'r', encoding='utf-8') as f:
-            meals = json.load(f)
-    except FileNotFoundError:
-        meals = []
 
+    with open('cached_meals.json', 'r', encoding='utf-8') as f:
+        all_meals = json.load(f)
+
+    meals = all_meals.copy()
 
     if category:
         meals = [meal for meal in meals if meal.get('strCategory') == category]
 
+    if area:
+        meals = [meal for meal in meals if meal.get('strArea') == area]
+
+    if tag:
+        meals = [meal for meal in meals if meal.get('strTags') and tag.lower() in meal.get('strTags', '').lower()]
+
+    if search:
+        meals = [meal for meal in meals if search.lower() in meal.get('strMeal', '').lower()]
+
     paginator = Paginator(meals, 8)
     page_obj = paginator.get_page(page_number)
 
+    categories = sorted(set(m.get('strCategory') for m in all_meals if m.get('strCategory')))
+    areas = sorted(set(m.get('strArea') for m in all_meals if m.get('strArea')))
+    all_tags = set()
+    for m in all_meals:
+        tags_str = m.get('strTags')
+        if tags_str:
+            for t in tags_str.split(','):
+                all_tags.add(t.strip())
+    tags = sorted(all_tags)
+
     favorite_ids = []
     if request.user.is_authenticated:
-        favorite_ids = FavoriteRecipe.objects.filter(user=request.user).values_list('meal_id', flat=True)
+        favorite_ids =FavoriteRecipe.objects.filter(user=request.user).values_list('meal_id', flat=True)
 
-    cat_response = requests.get('https://www.themealdb.com/api/json/v1/1/list.php?c=list')
-    categories = cat_response.json().get('meals', []) 
 
     return render(request, 'app/recipes.html', {
         'page_obj': page_obj,
-        'category': category,
-        'favorite_ids': favorite_ids,
         'categories': categories,
+        'areas': areas,
+        'tags': tags,
+        'category': category,
+        'area': area,
+        'tag': tag,
+        'search': search,
+        'favorite_ids': favorite_ids,
     })
+    
+
 
 
 @login_required
@@ -250,3 +275,7 @@ def recipe_detail(request, meal_id):
 def favorite_recipes(request):
     favorites = FavoriteRecipe.objects.filter(user=request.user)
     return render(request, 'app/favorite_recipes.html', {'favorites': favorites})
+
+
+def about(request):
+    return render(request, 'app/about.html')

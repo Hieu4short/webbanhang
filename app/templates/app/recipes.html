@@ -2,18 +2,47 @@
 {% block main_content %}
 <div class="container my-5">
     <h2 class="text-center mb-4">Recipes</h2>
+
+    <!-- Form lọc -->
+    <form method="get" class="mb-4 d-flex flex-wrap gap-2 justify-content-center">
+        <select name="category" class="form-select" style="width: 180px">
+            <option value="">All Categories</option>
+            {% for c in categories %}
+                <option value="{{ c }}" {% if c == category %} selected{% endif %}>{{ c }}</option>
+            {% endfor %}
+        </select>
+
+        <select name="area" class="form-select" style="width: 180px;">
+            <option value="">All Areas</option>
+            {% for a in areas %}
+                <option value="{{ a }}" {% if a == area %} selected{% endif %}>{{ a }}</option>
+            {% endfor %}
+        </select>
+
+        <select name="tag" class="form-select" style="width: 180px;">
+            <option value="">All Tags</option>
+            {% for t in tags %}
+                <option value="{{ t }}" {% if t == tag %}selected{% endif %}>{{ t }}</option>
+            {% endfor %}
+        </select>
+
+        <input type="text" name="search" class="form-control" placeholder="Search..." value="{{ search|default:'' }}" style="width: 200px;">
+        <button type="submit" class="btn btn-primary">Filter</button>
+    </form>
+
+    <!-- Danh sách món ăn -->
     <div class="row justify-content-center">
         {% for meal in page_obj %}
-        <div class="col-md-4 col-lg-3">
+        <div class="col-md-4 col-lg-3 mb-4">
             <div class="card h-100">
                 <a href="{% url 'recipe_detail' meal.idMeal %}">
                     <img src="{{ meal.strMealThumb }}" class="card-img-top" alt="{{ meal.strMeal }}">
                 </a>
                 <div class="card-body">
-                    <h5 class="card-title">
+                    <h5 class="card-title text-center">
                         <a href="{% url 'recipe_detail' meal.idMeal %}">{{ meal.strMeal }}</a>
                     </h5>
-                    <button class="btn btn-outline-danger btn-fav"
+                    <button class="btn btn-outline-danger btn-fav w-100 mt-2"
                         data-meal-id="{{ meal.idMeal }}"
                         data-meal-name="{{ meal.strMeal }}"
                         data-meal-thumb="{{ meal.strMealThumb }}">
@@ -28,19 +57,28 @@
         </div>
         {% endfor %}
     </div>
+
     <!-- Pagination -->
     <nav>
-      <ul class="pagination justify-content-center">
-        {% if page_obj.has_previous %}
-          <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if category %}&category={{ category }}{% endif %}">Previous</a></li>
-        {% endif %}
-        <li class="page-item active"><span class="page-link">{{ page_obj.number }}</span></li>
-        {% if page_obj.has_next %}
-          <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}{% if category %}&category={{ category }}{% endif %}">Next</a></li>
-        {% endif %}
-      </ul>
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}&category={{ category }}&area={{ area }}&tag={{ tag }}&search={{ search }}">Previous</a>
+                </li>
+            {% endif %}
+            <li class="page-item active">
+                <span class="page-link">{{ page_obj.number }}</span>
+            </li>
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}&category={{ category }}&area={{ area }}&tag={{ tag }}&search={{ search }}">Next</a>
+                </li>
+            {% endif %}
+        </ul>
     </nav>
 </div>
+
+<!-- Toggle Favorite -->
 <script>
 $('.btn-fav').click(function(e){
     e.preventDefault();

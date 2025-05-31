@@ -1,0 +1,68 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+{% block main_content %}
+<div class="container py-5">
+  <h1 class="mb-5 text-center fw-bold">About Us</h1>
+
+  <!-- Introduction -->
+  <div class="row justify-content-center mb-4">
+    <div class="col-md-10">
+      <p class="text-center">
+        Welcome to <strong>NutriHealth</strong> – a comprehensive platform dedicated to empowering individuals to live healthier and more informed lives.
+        Our mission is to provide reliable tools and data-driven insights into nutrition, health, and wellness, all in one place.
+      </p>
+    </div>
+  </div>
+
+  <!-- Vision -->
+  <div class="row justify-content-center mb-4">
+    <div class="col-md-10">
+      <h4 class="text-center mb-3">🌟 Our Vision</h4>
+      <p class="text-center">
+        To become a trusted digital companion for every person seeking a better understanding of their health and nutrition.
+        We envision a world where technology bridges the gap between knowledge and healthy living.
+      </p>
+    </div>
+  </div>
+
+  <!-- Mission -->
+  <div class="row justify-content-center mb-4">
+    <div class="col-md-10">
+      <h4 class="text-center mb-3">🎯 Our Mission</h4>
+      <p class="text-center">
+        Our mission is to make nutrition education and health monitoring accessible and engaging.
+        We aim to provide intuitive tools like BMI/BMR calculators, food lookup APIs, and healthy recipes to help users make better choices every day.
+      </p>
+
+      <img src="{% static 'app/images/logo1.png' %}" width="300" height="300" class="mx-auto d-block my-3" alt="Team Logo">
+    </div>
+  </div>
+
+  <!-- Core Values -->
+  <div class="row justify-content-center mb-4">
+    <div class="col-md-10">
+      <h4 class="text-center mb-3">💡 Core Values</h4>
+      <ul class="list-group list-group-flush text-center">
+        <li class="list-group-item">✔️ User-Centric Design: We put the user first in everything we build.</li>
+        <li class="list-group-item">✔️ Accuracy: All nutritional data and calculations are backed by trusted sources.</li>
+        <li class="list-group-item">✔️ Innovation: We continuously improve and expand our features with modern technologies.</li>
+        <li class="list-group-item">✔️ Education: We aim to raise awareness about personal health and wellness through technology.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Team -->
+  <div class="row justify-content-center mb-5">
+    <div class="col-md-10">
+      <h4 class="text-center mb-3">👨‍💻 Our Team</h4>
+      <p class="text-center">
+        This project was created by a group of passionate Information Technology students who are dedicated to improving community health using practical tech solutions.
+        We believe that access to the right tools and knowledge can transform lives – and NutriHealth is our contribution toward that goal.
+      </p>
+    </div>
+  </div>
+
+
+</div>
+{% endblock main_content %}
