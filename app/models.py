@@ -32,3 +32,21 @@ class FavoriteRecipe(models.Model):
     meal_name = models.CharField(max_length=255)
     meal_thumb = models.URLField()
     created_at = models.DateTimeField(auto_now_add=True)
+
+class Article(models.Model):
+    title = models.CharField(max_length=200)
+    slug = models.SlugField(unique=True)
+    content = models.TextField()
+    image = models.ImageField(upload_to='articles_images/', null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    is_approved = models.BooleanField(default=False)
+    category = models.CharField(max_length=100, choices=[
+        ('Nutrition', 'Nutrition'),
+        ('Exercise', 'Exercise'),
+        ('Healthy Living', 'Healthy Living'),
+        ('Tips', 'Tips'),
+    ])
+
+    def __str__(self):
+        return self.title

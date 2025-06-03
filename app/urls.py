@@ -25,4 +25,7 @@ urlpatterns = [
     path('toggle_favorite/', views.toggle_favorite, name='toggle_favorite'),
     path('recipes/<str:meal_id>/', views.recipe_detail, name='recipe_detail'),
     path('about/', views.about, name='about'),
+    path('articles/', views.articles_list, name='articles_list'),
+    path('articles/<slug:slug>/', views.article_detail, name='article_detail'),
+    path('submit-article/', views.submit_article, name='submit_article'),
 ]

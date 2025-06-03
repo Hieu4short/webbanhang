@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 import requests
 import string
 import json
@@ -16,6 +16,9 @@ from .models import UserProfile
 from django.core.paginator import Paginator
 from .models import FavoriteRecipe
 from django.views.decorators.http import require_POST
+from .models import Article
+from .forms import ArticleForm
+from django.utils.text import slugify
 
 
 # Create your views here.
@@ -279,3 +282,25 @@ def favorite_recipes(request):
 
 def about(request):
     return render(request, 'app/about.html')
+
+def articles_list(request):
+    articles = Article.objects.filter(is_approved=True).order_by('-created_at')
+    return render(request, 'app/articles.html', {'articles': articles})
+
+def article_detail(request, slug):
+    article = get_object_or_404(Article, slug=slug, is_approved=True)
+    return render(request, 'app/article_detail.html', {'article': article})
+
+@login_required
+def submit_article(request):
+    if request.method == 'POST':
+        form = ArticleForm(request.POST, request.FILES)
+        if form.is_valid():
+            article = form.save(commit=False)
+            article.author = request.user
+            article.slug = slugify(article.title)
+            article.save()
+            return redirect('articles_list')
+    else:
+        form = ArticleForm()
+    return render(request, 'app/submit_article.html', {'form': form})
