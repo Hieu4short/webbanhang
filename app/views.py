@@ -19,6 +19,8 @@ from django.views.decorators.http import require_POST
 from .models import Article
 from .forms import ArticleForm
 from django.utils.text import slugify
+from django.contrib import messages
+from django.utils.crypto import get_random_string
 
 
 # Create your views here.
@@ -298,8 +300,14 @@ def submit_article(request):
         if form.is_valid():
             article = form.save(commit=False)
             article.author = request.user
-            article.slug = slugify(article.title)
+            base_slug = slugify(article.title)
+            slug = base_slug
+            count = 1
+            while Article.objects.filter(slug=slug).exists():
+                slug = f"{base_slug}-{get_random_string(4)}"
+            article.slug = slug
             article.save()
+            messages.success(request, "Your article has been submitted successfully and is pending approval!")
             return redirect('articles_list')
     else:
         form = ArticleForm()

@@ -7,7 +7,7 @@
             <div class="col-md-6 col-lg-4 mb-4">
                 <div class="card h-100">
                     {% if article.image %}
-                        <img src="{{ article.image.url}}" class="card-img-top" alt="{{ article.title}}">
+                        <img src="{{ article.image.url}}" class="card-img-top" alt="{{ article.title}}" style="height: 220px; object-fit: cover; width: 100%;">
                     {% endif %}
                     <div class="card-body">
                         <h5 class="card-title">
@@ -20,4 +20,11 @@
         {% endfor %}
     </div>
 </div>
+{% if messages %}
+  {% for message in messages %}
+    <script>
+      alert("{{ message|escapejs }}");
+    </script>
+  {% endfor %}
+{% endif %}
 {% endblock main_content %}
