@@ -286,8 +286,18 @@ def about(request):
     return render(request, 'app/about.html')
 
 def articles_list(request):
-    articles = Article.objects.filter(is_approved=True).order_by('-created_at')
-    return render(request, 'app/articles.html', {'articles': articles})
+    category = request.GET.get('category')
+    if category:
+        articles = Article.objects.filter(is_approved=True, category=category).order_by('-created_at')
+    else:
+        articles = Article.objects.filter(is_approved=True).order_by('-created_at')
+    categories = Article._meta.get_field('category').choices
+    return render(request, 'app/articles.html', {
+        'articles': articles, 
+        'categories': categories,
+        'current_category': category,
+        })
+
 
 def article_detail(request, slug):
     article = get_object_or_404(Article, slug=slug, is_approved=True)
@@ -312,3 +322,4 @@ def submit_article(request):
     else:
         form = ArticleForm()
     return render(request, 'app/submit_article.html', {'form': form})
+
