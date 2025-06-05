@@ -52,3 +52,12 @@ class Article(models.Model):
 
     def __str__(self):
         return self.title
+    
+
+class SavedArticle(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    article = models.ForeignKey(Article, on_delete=models.CASCADE)
+    saved_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ['user', 'article']

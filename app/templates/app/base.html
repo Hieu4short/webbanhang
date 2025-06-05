@@ -32,6 +32,9 @@
 
   <!-- Modernizr -->
   <script src="js/vendor/modernizr-3.11.2.min.js"></script>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
 <body>
 
@@ -68,7 +71,7 @@
         <ul class="dropdown-menu" aria-labelledby="articlesDropdown">
           <li><a class="dropdown-item" href="{% url 'articles_list' %}">All Articles</a></li>
           <li><a class="dropdown-item" href="{% url 'submit_article' %}">Submit Article</a></li>
-          <li><a class="dropdown-item" href="#">Saved Articles</a></li>
+          <li><a class="dropdown-item" href="{% url 'saved_articles' %}">Saved Articles</a></li>
         </ul>
       </li>
 

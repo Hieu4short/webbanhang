@@ -1,0 +1,26 @@
+{% extends 'app/base.html' %}
+{% block main_content %}
+<div class="container py-5">
+    <h2 class="text-center mb-4">Saved Articles</h2>
+    <div class="row">
+        {% for saved in saved_articles %}
+            {% with article=saved.article %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100">
+                        {% if article.image %}
+                        <img src="{{ article.image.url }}" class="card-img-top" alt="{{ article.title }}" style="height: 200px; object-fit: cover;">
+                        {% endif %}
+                        <div class="card-body">
+                            <h5><a href="{% url 'article_detail' article.slug %}">{{ article.title }}</a></h5>
+                            <p class="text-muted">By {{ article.author.username }} | {{ article.category }}</p>
+                            <a href="{% url 'unsave_article' article.id %}" class="btn btn-outline-danger btn-sm mt-2">Unsave</a>
+                        </div>
+                    </div>
+                </div>
+            {% endwith %}
+        {% empty %}
+        <p class="text-center">No articles saved yet</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock main_content %}

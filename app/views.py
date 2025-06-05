@@ -21,6 +21,7 @@ from .forms import ArticleForm
 from django.utils.text import slugify
 from django.contrib import messages
 from django.utils.crypto import get_random_string
+from .models import SavedArticle
 
 
 # Create your views here.
@@ -292,16 +293,28 @@ def articles_list(request):
     else:
         articles = Article.objects.filter(is_approved=True).order_by('-created_at')
     categories = Article._meta.get_field('category').choices
+    saved_ids = []
+    if request.user.is_authenticated:
+        saved_ids = list(SavedArticle.objects.filter(user=request.user).values_list('article_id', flat=True))
+
     return render(request, 'app/articles.html', {
         'articles': articles, 
         'categories': categories,
         'current_category': category,
+        'saved_ids': saved_ids,
         })
 
 
 def article_detail(request, slug):
     article = get_object_or_404(Article, slug=slug, is_approved=True)
-    return render(request, 'app/article_detail.html', {'article': article})
+    is_saved = False
+    if request.user.is_authenticated:
+        is_saved = SavedArticle.objects.filter(user=request.user, article=article).exists()
+
+    return render(request, 'app/article_detail.html', {
+        'article': article,
+        'is_saved': is_saved
+        })
 
 @login_required
 def submit_article(request):
@@ -323,3 +336,25 @@ def submit_article(request):
         form = ArticleForm()
     return render(request, 'app/submit_article.html', {'form': form})
 
+
+
+@login_required
+def save_article(request, article_id):
+    article= get_object_or_404(Article, pk=article_id, is_approved=True)
+    SavedArticle.objects.create(user=request.user, article=article)
+    messages.success(request, "Article saved successfully!")
+    return redirect(request.META.get('HTTP_REFERER', 'articles_list'))
+
+@login_required
+def unsave_article(request, article_id):
+    article = get_object_or_404(Article, pk=article_id)
+    SavedArticle.objects.filter(user=request.user, article=article).delete()
+    messages.success(request, "Article removed from saved list!")
+    return redirect(request.META.get('HTTP_REFERER', 'articles_list'))
+
+@login_required
+def saved_articles(request):
+    saved = SavedArticle.objects.filter(user=request.user).select_related('article').order_by('-saved_at')
+    return render(request, 'app/saved_articles.html', {'saved_articles': saved})
+
+    

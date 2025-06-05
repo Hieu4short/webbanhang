@@ -28,4 +28,7 @@ urlpatterns = [
     path('articles/', views.articles_list, name='articles_list'),
     path('articles/<slug:slug>/', views.article_detail, name='article_detail'),
     path('submit-article/', views.submit_article, name='submit_article'),
+    path('saved-article/<int:article_id>', views.save_article, name='save_article'),
+    path('unsaved-article/<int:article_id>', views.unsave_article, name='unsave_article'),
+    path('saved-articles/', views.saved_articles, name='saved_articles'),
 ]
