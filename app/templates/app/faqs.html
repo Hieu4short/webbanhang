@@ -1,0 +1,20 @@
+{% extends 'app/base.html' %}
+{% block main_content %}
+<div class="container py-5">
+    <h2>Frequently Asked Questions (FAQs)</h2>
+    <p><strong>Q: Is NutriHealth free to use?</strong><br>
+    A: Yes, our basic services are completely free. You can access BMI/BMR calculators, food lookup, and health articles without any cost. Some advanced features may require a premium subscription in the future, but all essential tools remain free.</p>
+
+    <p><strong>Q: How do I calculate my BMI?</strong><br>
+    A: Go to the "Nutrition Tools" section in the main menu and select "BMI Calculator". Enter your height and weight, then click "Calculate" to see your BMI and health category.</p>
+
+    <p><strong>Q: How do I save my favorite recipes or articles?</strong><br>
+    A: You need to be logged in. On each recipe or article, click the "Save" or "Favorite" button. You can view your saved items in the "Favorites" or "Saved Articles" section in your profile.</p>
+
+    <p><strong>Q: Is my personal data safe?</strong><br>
+    A: Yes, we take your privacy seriously. Your data is stored securely and is never shared with third parties without your consent. See our <a href="{% url 'privacy_policy' %}">Privacy Policy</a> for more details.</p>
+
+    <p><strong>Q: How can I contact support?</strong><br>
+    A: You can reach us via the <a href="{% url 'contact_us' %}">Contact Us</a> page, or email us at contact@nutrihealth.com. We aim to respond within 24 hours.</p>
+</div>
+{% endblock %}

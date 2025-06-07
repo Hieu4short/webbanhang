@@ -31,4 +31,9 @@ urlpatterns = [
     path('saved-article/<int:article_id>', views.save_article, name='save_article'),
     path('unsaved-article/<int:article_id>', views.unsave_article, name='unsave_article'),
     path('saved-articles/', views.saved_articles, name='saved_articles'),
+    path('careers/', views.careers, name='careers'),
+    path('terms/', views.terms_of_service, name='terms_of_service'),
+    path('faqs/', views.faqs, name='faqs'),
+    path('contact/', views.contact_us, name='contact_us'),
+    path('privacy/', views.privacy_policy, name='privacy_policy'),
 ]

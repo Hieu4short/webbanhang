@@ -32,26 +32,25 @@
         <!-- Customer Support -->
         <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
           <h6 class="text-uppercase mb-4 fw-bold">Customer Support</h6>
-          <p><a href="/faq" class="text-reset">FAQs</a></p>
-          <p><a href="/contact" class="text-reset">Contact Us</a></p>
-          <p><a href="/returns" class="text-reset">Return Policy</a></p>
-          <p><a href="/privacy" class="text-reset">Privacy Policy</a></p>
+          <p><a href="{% url 'faqs' %}" class="text-reset">FAQs</a></p>
+          <p><a href="{% url 'contact_us' %}" class="text-reset">Contact Us</a></p>
+          <p><a href="{% url 'privacy_policy' %}" class="text-reset">Privacy Policy</a></p>
         </div>
   
         <!-- Resources -->
         <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
           <h6 class="text-uppercase mb-4 fw-bold">Resources</h6>
-          <p><a href="/articles" class="text-reset">Health Articles</a></p>
-          <p><a href="/tools" class="text-reset">Nutrition Tools</a></p>
-          <p><a href="/recipes" class="text-reset">Healthy Recipes</a></p>
+          <p><a href="{% url 'articles_list' %}" class="text-reset">Health Articles</a></p>
+          <p><a href="{% url 'food_lookup' %}" class="text-reset">Food Lookup</a></p>
+          <p><a href="{% url 'recipes' %}" class="text-reset">Healthy Recipes</a></p>
         </div>
   
         <!-- Company -->
         <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
           <h6 class="text-uppercase mb-4 fw-bold">Company</h6>
-          <p><a href="/about" class="text-reset">About Us</a></p>
-          <p><a href="/careers" class="text-reset">Careers</a></p>
-          <p><a href="/terms" class="text-reset">Terms of Service</a></p>
+          <p><a href="{% url 'about' %}" class="text-reset">About Us</a></p>
+          <p><a href="{% url 'careers' %}" class="text-reset">Careers</a></p>
+          <p><a href="{% url 'terms_of_service' %}" class="text-reset">Terms of Service</a></p>
         </div>
   
       </div>

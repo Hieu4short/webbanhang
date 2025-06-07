@@ -1,0 +1,17 @@
+{% extends 'app/base.html' %}
+{% block main_content %}
+<div class="container py-5">
+    <h2>Terms of Service</h2>
+    <p>Welcome to NutriHealth! By accessing or using our website and services, you agree to comply with and be bound by the following terms and conditions:</p>
+    <ul>
+        <li><strong>Use of Services:</strong> You agree to use NutriHealth for lawful purposes only. You must not misuse our services or attempt to access them in unauthorized ways.</li>
+        <li><strong>Account Responsibility:</strong> You are responsible for maintaining the confidentiality of your account and password. Notify us immediately if you suspect unauthorized use of your account.</li>
+        <li><strong>Content:</strong> All content provided on NutriHealth is for informational purposes only and should not be considered medical advice. Always consult a healthcare professional for medical concerns.</li>
+        <li><strong>User-Generated Content:</strong> By submitting articles, comments, or other content, you grant NutriHealth the right to use, display, and distribute your content. You are responsible for ensuring your content does not violate any laws or third-party rights.</li>
+        <li><strong>Privacy:</strong> Your use of our services is also governed by our <a href="{% url 'privacy_policy' %}">Privacy Policy</a>.</li>
+        <li><strong>Changes to Terms:</strong> We may update these terms from time to time. Continued use of our services constitutes acceptance of the new terms.</li>
+        <li><strong>Termination:</strong> We reserve the right to suspend or terminate your access to NutriHealth at our discretion, without notice, for conduct that we believe violates these terms or is harmful to other users.</li>
+    </ul>
+    <p>If you have any questions about these terms, please contact us at <a href="mailto:contact@nutrihealth.com">contact@nutrihealth.com</a>.</p>
+</div>
+{% endblock %}

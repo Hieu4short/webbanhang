@@ -357,4 +357,17 @@ def saved_articles(request):
     saved = SavedArticle.objects.filter(user=request.user).select_related('article').order_by('-saved_at')
     return render(request, 'app/saved_articles.html', {'saved_articles': saved})
 
-    
+def careers(request):
+    return render(request, 'app/careers.html')
+
+def terms_of_service(request):
+    return render(request, 'app/terms_of_service.html')
+
+def faqs(request):
+    return render(request, 'app/faqs.html')
+
+def contact_us(request):
+    return render(request, 'app/contact_us.html')
+
+def privacy_policy(request):
+    return render(request, 'app/privacy_policy.html')
