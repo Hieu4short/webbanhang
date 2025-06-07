@@ -22,6 +22,8 @@ from django.utils.text import slugify
 from django.contrib import messages
 from django.utils.crypto import get_random_string
 from .models import SavedArticle
+from django.core.mail import send_mail
+from .forms import NewsletterForm
 
 
 # Create your views here.
@@ -371,3 +373,21 @@ def contact_us(request):
 
 def privacy_policy(request):
     return render(request, 'app/privacy_policy.html')
+
+def subscribe_newsletter(request):
+    if request.method == 'POST':
+        form = NewsletterForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+
+            send_mail(
+                subject='Thanks for subcribing!',
+                message='You have been subscribed to NutriHealth newsletter!',
+                from_email='hieu.haminh2255@gmail.com',
+                recipient_list=[email],
+                fail_silently=False,
+            )
+
+            messages.success(request, 'Subscription successful. Please check your inbox!')
+            return redirect('home')
+    return redirect('home')

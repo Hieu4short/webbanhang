@@ -19,3 +19,10 @@ class ArticleForm(forms.ModelForm):
             'category': forms.Select(attrs={'class': 'form-control'}),
             'image': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
+
+
+class NewsletterForm(forms.Form):
+    email = forms.EmailField(label='Enter your email', widget=forms.EmailInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Enter your email', 
+    }))
