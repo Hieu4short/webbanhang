@@ -24,9 +24,27 @@
                 <p class="text-center">Category: {{ category }}</p>
             </div>
             {% endif %}
+            {% if suggested_meals %}
+            <div class="mt-4">
+                <h5 class="text-center">Some suggested meals for you</h5>
+                <div class="row">
+                    {% for meal in suggested_meals %}
+                    <div class="col-6 col-md-3 mb-3">
+                        <a href="{% url 'recipe_detail' meal.idMeal%}" class="text-decoration-none text-dark">
+                            <div class="card h-100">
+                                <img src="{{ meal.strMealThumb }}" class="card-img-top" alt="{{ meal.strMeal }}">
+                                <div class="card-body p-2">
+                                    <h6 class="card-title text-center mb-0">{{ meal.strMeal }}</h6>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
             </div>
         </div>
     </div>
-</div>
 
 {% endblock main_content %}

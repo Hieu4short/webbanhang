@@ -3,6 +3,7 @@ import requests
 import string
 import json
 import os
+import random
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.contrib.auth import views as auth_views         
@@ -56,6 +57,7 @@ def home(request):
 def bmi_calculator(request):
     bmi = None
     category = None
+    suggested_meals = []
 
     if request.method == 'POST':
         weight = float(request.POST['weight'])
@@ -65,12 +67,16 @@ def bmi_calculator(request):
 
         if bmi <= 18.5:
             category = "Underweight"
+            suggested_meals = get_suggested_meals(bmi)
         elif bmi < 25:
             category = "Normal"
+            suggested_meals = get_suggested_meals(bmi)
         elif bmi < 30:
             category = "Overweight"
+            suggested_meals = get_suggested_meals(bmi)
         else:
             category = "Obese"
+            suggested_meals = get_suggested_meals(bmi)
 
         BMILog.objects.create(
             user=request.user,
@@ -82,11 +88,13 @@ def bmi_calculator(request):
 
     return render(request, 'app/bmi.html', {
         'bmi': bmi,
-        'category': category
+        'category': category,
+        'suggested_meals': suggested_meals,
     })
 
 def bmr_calculator(request):
     bmr = None
+    suggested_meals = []
 
     if request.method == 'POST':
         weight = float(request.POST.get('weight'))
@@ -109,8 +117,11 @@ def bmr_calculator(request):
             bmr_value=bmr
         )
 
+        suggested_meals = get_suggested_meals_by_bmr(bmr)
+
     return render(request, 'app/bmr.html', {
-        'bmr': bmr
+        'bmr': bmr,
+        'suggested_meals': suggested_meals
     })
 
 def food_lookup(request):
@@ -391,3 +402,60 @@ def subscribe_newsletter(request):
             messages.success(request, 'Subscription successful. Please check your inbox!')
             return redirect('home')
     return redirect('home')
+
+def get_user_bmi_category(bmi):
+    if bmi < 18.5:
+        return 'Underweight'
+    elif 18.5 <= bmi < 25:
+        return 'Normal'
+    elif 25 <= bmi < 30:
+        return 'Overweight'
+    else:
+        return 'Obese'
+    
+
+def get_suggested_meals(bmi):
+    with open('cached_meals.json', 'r') as f:
+        data = json.load(f)
+
+    def filter_meals(tags):
+        return [m for m in data if any(tag.lower() in (m.get('strTags') or '').lower() for tag in tags)]
+
+    if bmi < 18.5:
+        meals = filter_meals(['Beef', 'Pasta', 'Egg', 'Lamb', 'Pork'])
+    elif bmi < 25:
+        meals = filter_meals(['Balanced', 'Chicken', 'Fish', 'Healthy', 'Main', 'Rice', 'Seafood'])
+    elif bmi < 30:
+        meals = filter_meals(['Salad', 'Vegetarian', 'Vegetable', 'Light', 'Low Calorie'])
+    else:
+        meals = filter_meals(['Vegan', 'Low fat', 'Vegetable', 'Salad', 'Healthy'])
+
+    if not meals:
+        meals = random.sample(data, 4)
+    return meals[:4]
+
+
+@login_required
+def suggested_meals_view(request):
+    user_profile = request.user.profile
+    latest_bmi = user_profile.latest_bmi
+    meals = get_suggested_meals(latest_bmi)
+    return render(request, 'suggested_meals.html', {'meals': meals})
+
+def get_suggested_meals_by_bmr(bmr):
+    with open('cached_meals.json', 'r') as f:
+        data = json.load(f)
+
+    def filter_meals(tags):
+        return [m for m in data if any(tag.lower() in (m.get('strTags') or '').lower() for tag in tags)]
+    
+    if bmr < 1400:
+        meals = filter_meals(['Beef', 'Pasta', 'Egg', 'Lamb', 'Pork', 'Rice'])
+    elif bmr < 1800:
+        meals = filter_meals(['Balanced', 'Chicken', 'Fish', 'Healthy', 'Main', 'Seafood'])
+    else:
+        meals = filter_meals(['Protein', 'High Protein', 'Steak', 'Chicken', 'Fish', 'Egg', 'Seafood'])
+
+    if not meals:
+        meals = random.sample(data, 4)
+    return meals[:4]
