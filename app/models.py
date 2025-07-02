@@ -61,3 +61,12 @@ class SavedArticle(models.Model):
 
     class Meta:
         unique_together = ['user', 'article']
+
+class Comment(models.Model):
+    article = models.ForeignKey('Article', on_delete=models.CASCADE, related_name='comments')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self) -> str:
+        return f'Comment by {self.user.username} in {self.article.title}'

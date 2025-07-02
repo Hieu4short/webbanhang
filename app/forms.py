@@ -2,6 +2,7 @@ from django import forms
 from .models import UserProfile
 from .models import Article
 from ckeditor.widgets import CKEditorWidget
+from .models import Comment
 
 class AvatarUpdateForm(forms.ModelForm):
     class Meta:
@@ -26,3 +27,11 @@ class NewsletterForm(forms.Form):
         'class': 'form-control',
         'placeholder': 'Enter your email', 
     }))
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['content']
+        widgets = {
+            'content': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Write your comment...'}),
+        }

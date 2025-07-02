@@ -25,6 +25,8 @@ from django.utils.crypto import get_random_string
 from .models import SavedArticle
 from django.core.mail import send_mail
 from .forms import NewsletterForm
+from .models import Comment
+from .forms import CommentForm
 
 
 # Create your views here.
@@ -324,9 +326,23 @@ def article_detail(request, slug):
     if request.user.is_authenticated:
         is_saved = SavedArticle.objects.filter(user=request.user, article=article).exists()
 
+    comments = article.comments.order_by('-created_at')
+    if request.method == 'POST' and request.user.is_authenticated:
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            comment = comment_form.save(commit=False)
+            comment.article = article
+            comment.user = request.user
+            comment.save()
+            return redirect('article_detail', slug=slug)
+    else:
+        comment_form = CommentForm()
+
     return render(request, 'app/article_detail.html', {
         'article': article,
-        'is_saved': is_saved
+        'is_saved': is_saved,
+        'comments': comments,
+        'comment_form': comment_form,
         })
 
 @login_required
@@ -459,3 +475,4 @@ def get_suggested_meals_by_bmr(bmr):
     if not meals:
         meals = random.sample(data, 4)
     return meals[:4]
+
