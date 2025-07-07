@@ -145,11 +145,128 @@
  {% include 'app/_footer.html' %}
 
 
+ <div id="chat-container" class="chat-container">
+  <div id="chat-header" class="chat-header">
+    <span>NutriHealth Assistant</span>
+    <button id="chat-close-btn" class="chat-close-btn"><i class="fas fa-times"></i></button>
+    <button id="chat-minimize-btn" class="chat-minimize-btn"><i class="fas fa-minus"></i></button>
+  </div>
+  <div id="chat-messages" class="chat-messages"></div>
+  <div class="chat-input-group">
+    <input type="text" id="user-input" class="chat-input" placeholder="Ask me about nutrition...">
+    <button id="send-btn" class="chat-send-btn"><i class="fas fa-paper-plane"></i></button>
+  </div>
+</div>
+<button id="chat-toggle-btn" class="chat-toggle-btn">
+  <i class="fas fa-comment-dots"></i>
+</button>
+
+
   <!-- JavaScript at the bottom for faster page load -->
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script>window.jQuery || document.write('<script src="js/vendor/jquery-3.7.1.min.js"><\/script>')</script>
   <script src="js/plugins.js"></script>
   <script src="js/main.js"></script>
+  <!-- Chat JavaScript -->
+  <script>
+    $(document).ready(function() {
+      // Initialize chat
+      const chatContainer = $('#chat-container');
+      const chatMessages = $('#chat-messages');
+      const userInput = $('#user-input');
+      
+      // Toggle chat visibility
+      $('#chat-toggle-btn').click(function() {
+        chatContainer.addClass('show').show();
+        $(this).hide();
+        userInput.focus();
+      });
+      
+      $('#chat-close-btn').click(function() {
+        chatContainer.removeClass('show');
+        setTimeout(() => {
+          chatContainer.hide();
+          $('#chat-toggle-btn').show();
+        }, 300);
+      });
+      
+      // Handle sending messages
+      function sendMessage() {
+        const message = userInput.val().trim();
+        if (!message) return;
+        
+        // Add user message
+        chatMessages.append(`
+          <div class="message user-message">
+            ${message}
+          </div>
+        `);
+        
+        // Clear input
+        userInput.val('');
+        scrollToBottom();
+        
+        // Show typing indicator
+        chatMessages.append(`
+          <div class="message typing-indicator">
+            <span></span><span></span><span></span>
+          </div>
+        `);
+        
+        scrollToBottom();
+        
+        // Send to server
+        $.ajax({
+          url: '/chat/api/',
+          method: 'POST',
+          data: { message: message },
+          success: function(response) {
+            // Remove typing indicator
+            $('.typing-indicator').remove();
+            
+            // Add bot response
+            chatMessages.append(`
+              <div class="message bot-message">
+                ${response.response || "I'm sorry, I didn't understand that."}
+              </div>
+            `);
+            
+            scrollToBottom();
+          },
+          error: function() {
+            $('.typing-indicator').remove();
+            chatMessages.append(`
+              <div class="message bot-message">
+                Sorry, I'm having trouble connecting. Please try again later.
+              </div>
+            `);
+            scrollToBottom();
+          }
+        });
+      }
+      
+      // Send on button click or Enter key
+      $('#send-btn').click(sendMessage);
+      userInput.keypress(function(e) {
+        if (e.which === 13) sendMessage();
+      });
+      
+      // Auto-scroll to bottom
+      function scrollToBottom() {
+        const messages = document.getElementById('chat-messages');
+        messages.scrollTop = messages.scrollHeight;
+      }
+      
+      // Initial welcome message
+      if (chatMessages.children().length === 0) {
+        chatMessages.append(`
+          <div class="message bot-message">
+            Hi! I'm NutriHealth Assistant. How can I help you today?
+          </div>
+        `);
+      }
+    });
+  </script>
 
 </body>
 </html>

@@ -37,4 +37,5 @@ urlpatterns = [
     path('contact/', views.contact_us, name='contact_us'),
     path('privacy/', views.privacy_policy, name='privacy_policy'),
     path('subscribe/', views.subscribe_newsletter, name='subscribe_newsletter'),
+    path('chat/api/', views.chat_api, name='chat_api'),
 ]

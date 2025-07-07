@@ -27,6 +27,8 @@ from django.core.mail import send_mail
 from .forms import NewsletterForm
 from .models import Comment
 from .forms import CommentForm
+from django.views.decorators.csrf import csrf_exempt
+from .chat_services import chatbot
 
 
 # Create your views here.
@@ -476,3 +478,14 @@ def get_suggested_meals_by_bmr(bmr):
         meals = random.sample(data, 4)
     return meals[:4]
 
+
+@csrf_exempt
+def chat_api(request):
+    if request.method == 'POST':
+        user_input = request.POST.get('message', '')
+        try:
+            response = chatbot.get_response(user_input)
+            return JsonResponse({'response': response})
+        except Exception as e:
+            return JsonResponse({'response': f"Error: {str(e)}"}, status=500)
+    return JsonResponse({'error': 'Invalid method'}, status=400)

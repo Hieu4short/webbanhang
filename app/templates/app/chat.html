@@ -1,0 +1,41 @@
+{% extends "app/base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Chatbot</h2>
+    <div id="chatbox" class="border p-3 mb-3" style="height: 400px; overflow-y: scroll;">
+        <!-- Tin nhắn sẽ hiển thị ở đây -->
+    </div>
+    <div class="input-group">
+        <input type="text" id="user_input" class="form-control" placeholder="Nhập tin nhắn...">
+        <button onclick="sendMessage()" class="btn btn-primary">Gửi</button>
+    </div>
+</div>
+
+<script>
+    async function sendMessage() {
+        const input = document.getElementById('user_input');
+        const chatbox = document.getElementById('chatbox');
+        
+        if (input.value.trim() === '') return;
+        
+        // Hiển thị tin nhắn người dùng
+        chatbox.innerHTML += `<p><strong>Bạn:</strong> ${input.value}</p>`;
+        
+        // Gọi API
+        const response = await fetch('/chat/api/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: `message=${encodeURIComponent(input.value)}`
+        });
+        
+        const data = await response.json();
+        chatbox.innerHTML += `<p><strong>Bot:</strong> ${data.response}</p>`;
+        input.value = '';
+        chatbox.scrollTop = chatbox.scrollHeight;
+    }
+</script>
+{% endblock %}
